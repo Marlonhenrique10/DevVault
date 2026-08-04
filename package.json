@@ -1,10 +1,22 @@
 {
   "name": "devvault",
   "private": true,
-  "packageManager": "pnpm@10",
+  "packageManager": "pnpm@10.12.4",
   "scripts": {
     "lint": "echo \"Root lint\"",
     "test": "echo \"Root test\"",
     "build": "echo \"Root build\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "globals": "^17.9.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.9.6",
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.66.0"
   }
 }
