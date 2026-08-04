@@ -1,0 +1,10 @@
+{
+  "name": "devvault",
+  "private": true,
+  "packageManager": "pnpm@10",
+  "scripts": {
+    "lint": "echo \"Root lint\"",
+    "test": "echo \"Root test\"",
+    "build": "echo \"Root build\""
+  }
+}
