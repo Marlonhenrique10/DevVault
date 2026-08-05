@@ -2,10 +2,12 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class HealthService {
-    async check() {
+    async getStatus() {
         return {
-            status: 'ok',
-            message: 'Service is running',
+            status: "ok",
+            service: "auth-service",
+            version: "1.0.0",
+            timestamp: new Date().toISOString(),
         };
     }
 }
