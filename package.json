@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "pnpm@10.12.4",
   "scripts": {
+    "auth:dev": "pnpm --filter auth-service run start:dev",
     "lint": "echo \"Root lint\"",
     "test": "echo \"Root test\"",
     "build": "echo \"Root build\""
