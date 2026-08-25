@@ -5,8 +5,18 @@ import { AuthService } from "./auth.service";
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Post('sign-in')
-    async signIn(@Body() body: { email: string, password: string }): Promise<{ message: string }> {
-        return this.authService.signIn(body.email, body.password);
+    // @Post('create-user')
+    // async createUser(@Body() authUser: dto.CreateAuthUserDto) {
+    //     return this.authService.createUser(authUser);
+    // }
+
+    @Get('/find-user-by-email')
+    async findUserByEmail(@Body() body: { email: string }) {
+        return this.authService.findUserByEmail(body.email);
+    }
+
+    @Get('/find-user-by-id')
+    async findUserById(@Body() body: { id: string }) {
+        return this.authService.findUserById(body.id);
     }
 }
