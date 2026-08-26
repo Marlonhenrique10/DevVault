@@ -1,5 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { AuthUserRepository } from "./repositories/auth-user.repository";
+import { SignUpDto } from "./dto/sign-up.dto";
+import * as bcrypt from 'bcrypt';
+import { AuthUserStatus } from "./enums/auth-user-status.enum";
 
 @Injectable()
 export class AuthService {
@@ -23,13 +26,26 @@ export class AuthService {
         return user;
     }
 
-    // async createUser(authUser: Partial<AuthUser>) {
-    //     const userExists = await this.authUserRepository.findByEmail(authUser.email);
+    async createUser(dto: SignUpDto) {
+        const userExists = await this.authUserRepository.findByEmail(dto.email);
 
-    //     if (userExists) {
-    //         throw new Error('Usuário com este e-mail já existe.')
-    //     }
+        if (userExists) {
+            throw new ConflictException('Usuário com este e-mail já existe.')
+        }
+
+        const passwordHash = await bcrypt.hash(dto.password, 12);
         
-    //     return this.authUserRepository.create(authUser);
-    // }
+        const user = await this.authUserRepository.create({
+            email: dto.email,
+            passwordHash,
+            status: AuthUserStatus.ACTIVE,
+        });
+
+        return {
+            id: user.id,
+            email: user.email,
+            status: user.status,
+            createdAt: user.createdAt,
+        };
+    }
 }
