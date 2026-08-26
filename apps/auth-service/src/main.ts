@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 
@@ -18,6 +18,18 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
       forbidNonWhitelisted: true,
+
+      exceptionFactory: (errors) => {
+        const messages = errors.flatMap((error) => 
+          Object.values(error.constraints ?? {})
+        );
+
+        return new BadRequestException({
+          statusCode: 400,
+          message: messages,
+          error: 'Erro de validação',
+        });
+      }
     }),
   );
 
