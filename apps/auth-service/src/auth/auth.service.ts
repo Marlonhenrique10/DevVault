@@ -1,13 +1,16 @@
-import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { AuthUserRepository } from "./repositories/auth-user.repository";
 import { SignUpDto } from "./dto/sign-up.dto";
 import * as bcrypt from 'bcrypt';
 import { AuthUserStatus } from "./enums/auth-user-status.enum";
+import { SignInDto } from "./dto/sign-in.dto";
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private readonly authUserRepository: AuthUserRepository
+        private readonly authUserRepository: AuthUserRepository,
+        private readonly jwtService: JwtService,
     ) {}
 
     async findUserByEmail(email: string) {
@@ -46,6 +49,25 @@ export class AuthService {
             email: user.email,
             status: user.status,
             createdAt: user.createdAt,
+        };
+    }
+
+    async signIn(dto: SignInDto) {
+        const user = await this.authUserRepository.findByEmail(dto.email);
+
+        if(!user) {
+            throw new UnauthorizedException('E-mail ou senha inválidos.');
+        }
+
+        const passwordMatches = await bcrypt.compare(dto.password, user.passwordHash);
+
+        if(!passwordMatches) {
+            throw new UnauthorizedException('E-mail ou senha inválidos.');
+        }
+
+        const accessToken = this.jwtService.sign({ sub: user.id, email: user.email });
+        return {
+            accessToken,
         };
     }
 }
