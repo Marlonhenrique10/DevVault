@@ -1,16 +1,14 @@
 import { Controller, Body, Post, Get } from "@nestjs/common";
 import { AuthService } from "./auth.service";
-import { SignUpDto } from "./dto/sign-up.dto";
-import { SignInDto } from "./dto/sign-in.dto";
 
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Post('sign-up')
-    async createUser(@Body() dto: SignUpDto) {
-        return this.authService.createUser(dto);
-    }
+    // @Post('create-user')
+    // async createUser(@Body() authUser: dto.CreateAuthUserDto) {
+    //     return this.authService.createUser(authUser);
+    // }
 
     @Get('/find-user-by-email')
     async findUserByEmail(@Body() body: { email: string }) {
@@ -20,10 +18,5 @@ export class AuthController {
     @Get('/find-user-by-id')
     async findUserById(@Body() body: { id: string }) {
         return this.authService.findUserById(body.id);
-    }
-
-    @Post('sign-in')
-    async signIn(@Body() dto: SignInDto) {
-        return this.authService.signIn(dto);
     }
 }
