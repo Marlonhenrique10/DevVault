@@ -1,7 +1,8 @@
-import { Controller, Body, Post, Get } from "@nestjs/common";
+import { Controller, Body, Post, Get, UseGuards, Req } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { SignUpDto } from "./dto/sign-up.dto";
 import { SignInDto } from "./dto/sign-in.dto";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -20,6 +21,15 @@ export class AuthController {
     @Get('/find-user-by-id')
     async findUserById(@Body() body: { id: string }) {
         return this.authService.findUserById(body.id);
+    }
+
+    @Get('me')
+    @UseGuards(JwtAuthGuard)
+    getMe(@Req() request: any) {
+    return {
+        message: 'Usuário autenticado.',
+        user: request.user,
+    };
     }
 
     @Post('sign-in')
